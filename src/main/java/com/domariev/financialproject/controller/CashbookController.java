@@ -5,6 +5,7 @@ import com.domariev.financialproject.service.CashbookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,20 +17,18 @@ public class CashbookController {
     private final CashbookService cashbookService;
 
     @PostMapping("/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Cashbook createCashbook(@RequestBody Cashbook cashbook) {
-        return cashbookService.create(cashbook);
+    public ResponseEntity<Cashbook> createCashbook(@RequestBody Cashbook cashbook) {
+        return ResponseEntity.ok(cashbookService.create(cashbook));
     }
 
     @GetMapping("/get/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Cashbook getCashbookById(@PathVariable Long id) {
-        return cashbookService.getById(id);
+    public ResponseEntity<Cashbook> getCashbookById(@PathVariable Long id) {
+        return ResponseEntity.ok(cashbookService.getById(id));
     }
 
     @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteCashbook(@PathVariable Long id) {
+    public ResponseEntity deleteCashbook(@PathVariable Long id) {
         cashbookService.delete(id);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

@@ -41,7 +41,7 @@ public class IncomeServiceImpl implements IncomeService {
         cashBook.getIncome().add(newIncome);
         newIncome = incomeRepository.save(newIncome);
         if (incomeRepository.findById(newIncome.getId()).isPresent()) {
-            log.info("add(): income with id " + id);
+            log.info("add(): income with id " + newIncome.getId());
         } else {
             log.info("add(): failed to add income");
             throw new ResourceCreationException("Failed to add income");
@@ -52,7 +52,7 @@ public class IncomeServiceImpl implements IncomeService {
     @Override
     public Income getById(Long id) {
         Income income = incomeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found cashbook with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found income with id " + id));
         log.info("get(): cashbook id " + id);
         return income;
     }
