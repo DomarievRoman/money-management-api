@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Data
-public abstract class MoneyFlow {
+public class MoneyFlow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,5 +21,4 @@ public abstract class MoneyFlow {
     @JsonSerialize(using = MoneySerializer.class)
     private BigDecimal payment;
     private LocalDateTime transactionDate;
-
 }

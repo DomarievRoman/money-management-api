@@ -3,9 +3,11 @@ package com.domariev.financialproject.model;
 import com.domariev.financialproject.model.abstractFlow.MoneyFlow;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "user_income")

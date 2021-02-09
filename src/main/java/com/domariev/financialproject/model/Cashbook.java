@@ -1,5 +1,7 @@
 package com.domariev.financialproject.model;
 
+import com.domariev.financialproject.serializer.MoneySerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -22,5 +24,6 @@ public class Cashbook {
     @JoinColumn(name = "fk_cash_book")
     private List<Costs> costs;
     @Column(name = "balance")
-    private BigDecimal balance;
+    @JsonSerialize(using = MoneySerializer.class)
+    private BigDecimal balance = BigDecimal.ZERO;
 }
