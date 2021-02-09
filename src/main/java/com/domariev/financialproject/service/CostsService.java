@@ -1,12 +1,12 @@
 package com.domariev.financialproject.service;
 
-import com.domariev.financialproject.model.Costs;
+import com.domariev.financialproject.dto.CostsDto;
 
 public interface CostsService {
 
-    Costs add(Costs costs, Long id);
+    CostsDto add(CostsDto costsDto, Long id);
 
-    Costs getById(Long id);
+    CostsDto getById(Long id);
 
     void delete(Long id);
 }

@@ -1,5 +1,6 @@
 package com.domariev.financialproject.controller;
 
+import com.domariev.financialproject.dto.CashbookDto;
 import com.domariev.financialproject.model.Cashbook;
 import com.domariev.financialproject.service.CashbookService;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @Slf4j
@@ -17,8 +20,8 @@ public class CashbookController {
     private final CashbookService cashbookService;
 
     @PostMapping("/create")
-    public ResponseEntity<Cashbook> createCashbook(@RequestBody Cashbook cashbook) {
-        return ResponseEntity.ok(cashbookService.create(cashbook));
+    public ResponseEntity<CashbookDto> createCashbook(@RequestBody @Valid CashbookDto cashbookDto) {
+        return ResponseEntity.ok(cashbookService.create(cashbookDto));
     }
 
     @GetMapping("/get/{id}")

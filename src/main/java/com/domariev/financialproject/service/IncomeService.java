@@ -1,12 +1,12 @@
 package com.domariev.financialproject.service;
 
-import com.domariev.financialproject.model.Income;
+import com.domariev.financialproject.dto.IncomeDto;
 
 public interface IncomeService {
 
-    Income add(Income income, Long id);
+    IncomeDto add(IncomeDto incomeDto, Long id);
 
-    Income getById(Long id);
+    IncomeDto getById(Long id);
 
     void delete(Long id);
 }

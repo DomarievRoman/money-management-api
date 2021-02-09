@@ -1,10 +1,11 @@
 package com.domariev.financialproject.service;
 
+import com.domariev.financialproject.dto.CashbookDto;
 import com.domariev.financialproject.model.Cashbook;
 
 public interface CashbookService {
 
-    Cashbook create(Cashbook cashBook);
+    CashbookDto create(CashbookDto cashbookDto);
 
     Cashbook getById(Long id);
 
