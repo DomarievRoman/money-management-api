@@ -1,7 +1,6 @@
 package com.domariev.financialproject.controller;
 
 import com.domariev.financialproject.dto.CashbookDto;
-import com.domariev.financialproject.model.Cashbook;
 import com.domariev.financialproject.service.CashbookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -25,8 +25,18 @@ public class CashbookController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Cashbook> getCashbookById(@PathVariable Long id) {
+    public ResponseEntity<CashbookDto> getCashbookById(@PathVariable Long id) {
         return ResponseEntity.ok(cashbookService.getById(id));
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<CashbookDto>> getAllCashbooks() {
+        return ResponseEntity.ok(cashbookService.getAll());
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<CashbookDto> updateCashbook(@RequestBody CashbookDto cashbookDto, @PathVariable Long id) {
+        return ResponseEntity.ok(cashbookService.update(cashbookDto, id));
     }
 
     @DeleteMapping("/delete/{id}")

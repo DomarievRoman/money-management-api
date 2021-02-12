@@ -1,7 +1,7 @@
 package com.domariev.financialproject.dto;
 
-import com.domariev.financialproject.model.Costs;
-import com.domariev.financialproject.model.Income;
+import com.domariev.financialproject.serializer.MoneySerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -19,10 +19,11 @@ public class CashbookDto {
     private String name;
 
     @Null(message = "Redundant value for parameter income")
-    private List<Income> income;
+    private List<IncomeDto> income;
 
     @Null(message = "Redundant value for parameter costs")
-    private List<Costs> costs;
+    private List<CostsDto> costs;
 
+    @JsonSerialize(using = MoneySerializer.class)
     private BigDecimal balance = BigDecimal.ZERO;
 }

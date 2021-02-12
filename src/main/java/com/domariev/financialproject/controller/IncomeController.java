@@ -1,7 +1,6 @@
 package com.domariev.financialproject.controller;
 
 import com.domariev.financialproject.dto.IncomeDto;
-import com.domariev.financialproject.model.Income;
 import com.domariev.financialproject.service.IncomeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -28,6 +28,12 @@ public class IncomeController {
     public ResponseEntity<IncomeDto> getIncomeById(@PathVariable Long id) {
         return ResponseEntity.ok(incomeService.getById(id));
     }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<IncomeDto>> getAllIncomes() {
+        return ResponseEntity.ok(incomeService.getAll());
+    }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteIncome(@PathVariable Long id) {

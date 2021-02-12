@@ -1,12 +1,14 @@
 package com.domariev.financialproject.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
 
 @Data
-public class IncomeDto extends MoneyFlowDto{
+@EqualsAndHashCode(callSuper = true)
+public class IncomeDto extends MoneyFlowDto {
 
     @Null
     private Long id;
@@ -14,5 +16,6 @@ public class IncomeDto extends MoneyFlowDto{
     @NotBlank(message = "Transaction sender can not be blank")
     private String from;
 
-    private Boolean regular;
+    private Boolean regular = false;
 }
+

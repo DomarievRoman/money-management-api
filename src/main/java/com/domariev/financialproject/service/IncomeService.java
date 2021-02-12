@@ -12,7 +12,5 @@ public interface IncomeService {
 
     List<IncomeDto> getAll();
 
-    IncomeDto update(IncomeDto incomeDto, Long id);
-
     void delete(Long id);
 }

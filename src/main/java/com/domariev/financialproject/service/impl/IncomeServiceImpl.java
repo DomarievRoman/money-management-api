@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -40,11 +41,7 @@ public class IncomeServiceImpl implements IncomeService {
         newIncome.setPayment(income.getPayment());
         newIncome.setTransactionDate(LocalDateTime.now());
         newIncome.setFrom(income.getFrom());
-        if (income.getRegular() == null) {
-            newIncome.setRegular(false);
-        } else {
-            newIncome.setRegular(income.getRegular());
-        }
+        newIncome.setRegular(income.getRegular());
         cashBook.getIncome().add(newIncome);
         CashbookBalanceCounter.countBalance(cashBook);
         newIncome = incomeRepository.save(newIncome);
@@ -63,6 +60,17 @@ public class IncomeServiceImpl implements IncomeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Not found income with id " + id));
         log.info("get(): cashbook id " + id);
         return incomeMapper.incomeToIncomeDto(income);
+    }
+
+    @Override
+    public List<IncomeDto> getAll() {
+        List<Income> incomeList = incomeRepository.findAll();
+        if (incomeList.isEmpty()) {
+            throw new ResourceNotFoundException("There are no incomes yet");
+        } else {
+            log.info("getAll(): retrieved all incomes");
+            return incomeMapper.incomeListToDto(incomeList);
+        }
     }
 
     @Override

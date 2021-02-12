@@ -19,7 +19,7 @@ public class Costs extends MoneyFlow {
     private String to;
     @Column(name = "full_paid_costs")
     @JsonProperty
-    private Boolean fullPaid;
+    private Boolean fullPaid = false;
 
     public Boolean getFullPaid(){
         return fullPaid;

@@ -1,13 +1,18 @@
 package com.domariev.financialproject.service;
 
 import com.domariev.financialproject.dto.CashbookDto;
-import com.domariev.financialproject.model.Cashbook;
+
+import java.util.List;
 
 public interface CashbookService {
 
     CashbookDto create(CashbookDto cashbookDto);
 
-    Cashbook getById(Long id);
+    CashbookDto getById(Long id);
+
+    List<CashbookDto> getAll();
+
+    CashbookDto update(CashbookDto cashbookDto, Long id);
 
     void delete(Long id);
 

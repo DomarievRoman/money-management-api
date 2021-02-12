@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -40,11 +41,7 @@ public class CostsServiceImpl implements CostsService {
         newCosts.setPayment(costs.getPayment());
         newCosts.setTransactionDate(LocalDateTime.now());
         newCosts.setTo(costs.getTo());
-        if (costs.getFullPaid() == null) {
-            newCosts.setFullPaid(false);
-        } else {
-            newCosts.setFullPaid(costs.getFullPaid());
-        }
+        newCosts.setFullPaid(costs.getFullPaid());
         cashBook.getCosts().add(newCosts);
         CashbookBalanceCounter.countBalance(cashBook);
         newCosts = costsRepository.save(newCosts);
@@ -64,6 +61,18 @@ public class CostsServiceImpl implements CostsService {
         log.info("get(): cashbook id " + id);
         return costsMapper.costsToCostsDto(costs);
     }
+
+    @Override
+    public List<CostsDto> getAll() {
+        List<Costs> costsList = costsRepository.findAll();
+        if (costsList.isEmpty()) {
+            throw new ResourceNotFoundException("There are no costs yet");
+        } else {
+            log.info("getAll(): retrieved all costs");
+            return costsMapper.costsListToDto(costsList);
+        }
+    }
+
 
     @Override
     public void delete(Long id) {

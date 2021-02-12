@@ -1,7 +1,6 @@
 package com.domariev.financialproject.controller;
 
 import com.domariev.financialproject.dto.CostsDto;
-import com.domariev.financialproject.model.Costs;
 import com.domariev.financialproject.service.CostsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -28,6 +28,12 @@ public class CostsController {
     public ResponseEntity<CostsDto> getCostsById(@PathVariable Long id) {
         return ResponseEntity.ok(costsService.getById(id));
     }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<CostsDto>> getAllCosts() {
+        return ResponseEntity.ok(costsService.getAll());
+    }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteCosts(@PathVariable Long id) {

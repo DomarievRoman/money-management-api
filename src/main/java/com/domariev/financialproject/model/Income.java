@@ -19,7 +19,7 @@ public class Income extends MoneyFlow {
     private String from;
     @Column(name = "regular_income")
     @JsonProperty
-    private Boolean regular;
+    private Boolean regular = false;
 
     public Boolean getRegular() {
         return regular;

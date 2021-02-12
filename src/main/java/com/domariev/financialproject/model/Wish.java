@@ -23,5 +23,9 @@ public class Wish {
     @Column(name = "date_to_buy")
     private LocalDate dateToBuy;
     @Column(name = "implemeted_wish")
-    private Boolean isImplemented;
+    private Boolean implemented = false;
+
+    public Boolean getImplemented() {
+        return implemented;
+    }
 }
