@@ -5,7 +5,6 @@ spring:
   application:
     name: financial-project
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: update
   datasource:
