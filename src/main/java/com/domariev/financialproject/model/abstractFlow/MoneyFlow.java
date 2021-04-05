@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @MappedSuperclass
 @Data
@@ -20,5 +20,5 @@ public class MoneyFlow {
     private String flowPurpose;
     @JsonSerialize(using = MoneySerializer.class)
     private BigDecimal payment;
-    private LocalDateTime transactionDate;
+    private Date transactionDate;
 }

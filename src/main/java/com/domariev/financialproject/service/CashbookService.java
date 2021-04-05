@@ -12,7 +12,7 @@ public interface CashbookService {
 
     List<CashbookDto> getAll();
 
-    CashbookDto update(CashbookDto cashbookDto, Long id);
+    CashbookDto update(CashbookDto cashbookDto);
 
     void delete(Long id);
 

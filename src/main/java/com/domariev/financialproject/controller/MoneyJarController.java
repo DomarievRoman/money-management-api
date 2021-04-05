@@ -35,7 +35,7 @@ public class MoneyJarController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<MoneyJarDto> updateWish(@RequestBody MoneyJarDto moneyJarDto, @PathVariable Long id) {
+    public ResponseEntity<MoneyJarDto> updateMoneyJar(@RequestBody MoneyJarDto moneyJarDto, @PathVariable Long id) {
         return ResponseEntity.ok(moneyJarService.update(moneyJarDto, id));
     }
 

@@ -1,8 +1,10 @@
 package com.domariev.financialproject.model;
 
 import com.domariev.financialproject.serializer.MoneySerializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -18,10 +20,13 @@ public class Cashbook {
     @Column(name = "name")
     private String name;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_cash_book")
+    @JoinColumn(name = "cashbook_id", updatable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Income> income;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_cash_book")
+    @JoinColumn(name = "cashbook_id", updatable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ToString.Exclude
     private List<Costs> costs;
     @Column(name = "balance")
     @JsonSerialize(using = MoneySerializer.class)

@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/v1/cashbook")
 public class CashbookController {
 
@@ -34,9 +35,9 @@ public class CashbookController {
         return ResponseEntity.ok(cashbookService.getAll());
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<CashbookDto> updateCashbook(@RequestBody CashbookDto cashbookDto, @PathVariable Long id) {
-        return ResponseEntity.ok(cashbookService.update(cashbookDto, id));
+    @PutMapping("/update")
+    public ResponseEntity<CashbookDto> updateCashbook(@RequestBody CashbookDto cashbookDto) {
+        return ResponseEntity.ok(cashbookService.update(cashbookDto));
     }
 
     @DeleteMapping("/delete/{id}")

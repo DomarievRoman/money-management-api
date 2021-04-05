@@ -18,10 +18,12 @@ public class Costs extends MoneyFlow {
     @Column(name = "costs_to")
     private String to;
     @Column(name = "full_paid_costs")
-    @JsonProperty
-    private Boolean fullPaid = false;
+    private Boolean fullPaid = true;
+    @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Cashbook cashbook;
 
-    public Boolean getFullPaid(){
+    public Boolean getFullPaid() {
         return fullPaid;
     }
 }

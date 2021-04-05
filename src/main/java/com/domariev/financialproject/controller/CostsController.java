@@ -14,14 +14,15 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/v1/cashbook/costs")
 public class CostsController {
 
     public final CostsService costsService;
 
-    @PostMapping("/add/{cashbookId}")
-    public ResponseEntity<CostsDto> addCosts(@RequestBody @Valid CostsDto costsDto, @PathVariable Long cashbookId) {
-        return ResponseEntity.ok(costsService.add(costsDto, cashbookId));
+    @PostMapping("/add")
+    public ResponseEntity<CostsDto> addCosts(@RequestBody @Valid CostsDto costsDto) {
+        return ResponseEntity.ok(costsService.add(costsDto));
     }
 
     @GetMapping("/get/{id}")
@@ -34,6 +35,10 @@ public class CostsController {
         return ResponseEntity.ok(costsService.getAll());
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<CostsDto> updateCosts(@RequestBody CostsDto costsDto) {
+        return ResponseEntity.ok(costsService.update(costsDto));
+    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteCosts(@PathVariable Long id) {

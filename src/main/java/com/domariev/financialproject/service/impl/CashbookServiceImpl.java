@@ -40,11 +40,10 @@ public class CashbookServiceImpl implements CashbookService {
     }
 
     @Override
-    public CashbookDto getById(Long id)  {
+    public CashbookDto getById(Long id) {
         Cashbook cashbook = cashbookRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found cashbook with id " + id));
         log.info("get(): cashbook id " + id);
-        CashbookBalanceCounter.countBalance(cashbook);
         cashbookRepository.save(cashbook);
         return cashbookMapper.cashbookToCashbookDto(cashbook);
     }
@@ -52,6 +51,10 @@ public class CashbookServiceImpl implements CashbookService {
     @Override
     public List<CashbookDto> getAll() {
         List<Cashbook> cashbookList = cashbookRepository.findAll();
+        for (Cashbook cashbook : cashbookList) {
+            CashbookBalanceCounter.countBalance(cashbook);
+            cashbookRepository.save(cashbook);
+        }
         if (cashbookList.isEmpty()) {
             throw new ResourceNotFoundException("There are no cashbooks yet");
         } else {
@@ -61,16 +64,15 @@ public class CashbookServiceImpl implements CashbookService {
     }
 
     @Override
-    public CashbookDto update(CashbookDto cashbookDto, Long id) {
-        CashbookDto newCashBook = getById(id);
+    public CashbookDto update(CashbookDto cashbookDto) {
+        CashbookDto newCashBook = new CashbookDto();
+        newCashBook.setId(cashbookDto.getId());
         newCashBook.setName(cashbookDto.getName());
         Cashbook cashbook = cashbookMapper.cashbookDtoToCashbook(newCashBook);
         cashbook = cashbookRepository.save(cashbook);
-        log.info("update(): new cashbook with id " + id);
+        log.info("update(): new cashbook with id " + cashbook.getId());
         return cashbookMapper.cashbookToCashbookDto(cashbook);
-
     }
-
 
     @Override
     public void delete(Long id) {

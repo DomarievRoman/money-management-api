@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 public class MoneyFlowDto {
@@ -21,5 +21,6 @@ public class MoneyFlowDto {
     @JsonSerialize(using = MoneySerializer.class)
     @DecimalMin(value = "1", message = "Invalid payment")
     private BigDecimal payment;
-    private LocalDateTime transactionDate;
+    @NotNull(message = "Transaction date cannot be null")
+    private Date transactionDate;
 }

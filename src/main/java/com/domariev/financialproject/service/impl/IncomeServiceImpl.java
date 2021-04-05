@@ -9,14 +9,12 @@ import com.domariev.financialproject.model.Income;
 import com.domariev.financialproject.repository.CashbookRepository;
 import com.domariev.financialproject.repository.IncomeRepository;
 import com.domariev.financialproject.service.IncomeService;
-import com.domariev.financialproject.util.CashbookBalanceCounter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,18 +30,19 @@ public class IncomeServiceImpl implements IncomeService {
     private final IncomeMapper incomeMapper = Mappers.getMapper(IncomeMapper.class);
 
     @Override
-    public IncomeDto add(IncomeDto incomeDto, Long id) {
+    public IncomeDto add(IncomeDto incomeDto) {
         Income income = incomeMapper.incomeDtoToIncome(incomeDto);
         Income newIncome = new Income();
-        Cashbook cashBook = cashbookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found cashbook with id " + id));
+        Cashbook cashbook = cashbookRepository.findById(income.getCashbook().getId())
+                .orElseThrow(() -> new ResourceNotFoundException
+                        ("Not found cashbook with id " + income.getCashbook().getId()));
         newIncome.setFlowPurpose(income.getFlowPurpose());
         newIncome.setPayment(income.getPayment());
-        newIncome.setTransactionDate(LocalDateTime.now());
+        newIncome.setTransactionDate(income.getTransactionDate());
         newIncome.setFrom(income.getFrom());
         newIncome.setRegular(income.getRegular());
-        cashBook.getIncome().add(newIncome);
-        CashbookBalanceCounter.countBalance(cashBook);
+        newIncome.setCashbook(income.getCashbook());
+        cashbook.getIncome().add(newIncome);
         newIncome = incomeRepository.save(newIncome);
         if (incomeRepository.findById(newIncome.getId()).isPresent()) {
             log.info("add(): income with id " + newIncome.getId());
@@ -71,6 +70,22 @@ public class IncomeServiceImpl implements IncomeService {
             log.info("getAll(): retrieved all incomes");
             return incomeMapper.incomeListToDto(incomeList);
         }
+    }
+
+    @Override
+    public IncomeDto update(IncomeDto incomeDto) {
+        IncomeDto newIncomeDto = new IncomeDto();
+        newIncomeDto.setId(incomeDto.getId());
+        newIncomeDto.setFlowPurpose(incomeDto.getFlowPurpose());
+        newIncomeDto.setPayment(incomeDto.getPayment());
+        newIncomeDto.setFrom(incomeDto.getFrom());
+        newIncomeDto.setTransactionDate(incomeDto.getTransactionDate());
+        newIncomeDto.setRegular(incomeDto.getRegular());
+        newIncomeDto.setCashbook(incomeDto.getCashbook());
+        Income income = incomeMapper.incomeDtoToIncome(newIncomeDto);
+        income = incomeRepository.save(income);
+        log.info("update(): income with id " + income.getId());
+        return incomeMapper.incomeToIncomeDto(income);
     }
 
     @Override

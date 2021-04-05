@@ -1,8 +1,10 @@
 package com.domariev.financialproject.dto;
 
 import com.domariev.financialproject.serializer.MoneySerializer;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;

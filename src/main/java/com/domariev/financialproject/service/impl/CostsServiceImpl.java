@@ -9,14 +9,12 @@ import com.domariev.financialproject.model.Costs;
 import com.domariev.financialproject.repository.CashbookRepository;
 import com.domariev.financialproject.repository.CostsRepository;
 import com.domariev.financialproject.service.CostsService;
-import com.domariev.financialproject.util.CashbookBalanceCounter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,18 +30,19 @@ public class CostsServiceImpl implements CostsService {
     private final CostsMapper costsMapper = Mappers.getMapper(CostsMapper.class);
 
     @Override
-    public CostsDto add(CostsDto costsDto, Long id) {
+    public CostsDto add(CostsDto costsDto) {
         Costs costs = costsMapper.costsDtoToCosts(costsDto);
         Costs newCosts = new Costs();
-        Cashbook cashBook = cashbookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found cashbook with id " + id));
+        Cashbook cashbook = cashbookRepository.findById(costs.getCashbook().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Not found cashbook with id "
+                        + costs.getCashbook().getId()));
         newCosts.setFlowPurpose(costs.getFlowPurpose());
         newCosts.setPayment(costs.getPayment());
-        newCosts.setTransactionDate(LocalDateTime.now());
+        newCosts.setTransactionDate(costs.getTransactionDate());
         newCosts.setTo(costs.getTo());
         newCosts.setFullPaid(costs.getFullPaid());
-        cashBook.getCosts().add(newCosts);
-        CashbookBalanceCounter.countBalance(cashBook);
+        newCosts.setCashbook(cashbook);
+        cashbook.getCosts().add(newCosts);
         newCosts = costsRepository.save(newCosts);
         if (costsRepository.findById(newCosts.getId()).isPresent()) {
             log.info("add(): costs with id " + newCosts.getId());
@@ -73,6 +72,21 @@ public class CostsServiceImpl implements CostsService {
         }
     }
 
+    @Override
+    public CostsDto update(CostsDto costsDto) {
+        CostsDto newCostsDto = new CostsDto();
+        newCostsDto.setId(costsDto.getId());
+        newCostsDto.setFlowPurpose(costsDto.getFlowPurpose());
+        newCostsDto.setPayment(costsDto.getPayment());
+        newCostsDto.setTo(costsDto.getTo());
+        newCostsDto.setTransactionDate(costsDto.getTransactionDate());
+        newCostsDto.setFullPaid(costsDto.getFullPaid());
+        newCostsDto.setCashbook(costsDto.getCashbook());
+        Costs costs = costsMapper.costsDtoToCosts(newCostsDto);
+        costs = costsRepository.save(costs);
+        log.info("update(): costs with id " + costs.getId());
+        return costsMapper.costsToCostsDto(costs);
+    }
 
     @Override
     public void delete(Long id) {

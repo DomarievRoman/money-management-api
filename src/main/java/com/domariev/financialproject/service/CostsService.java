@@ -6,11 +6,13 @@ import java.util.List;
 
 public interface CostsService {
 
-    CostsDto add(CostsDto costsDto, Long id);
+    CostsDto add(CostsDto costsDto);
 
     CostsDto getById(Long id);
 
     List<CostsDto> getAll();
+
+    CostsDto update(CostsDto costsDto);
 
     void delete(Long id);
 }

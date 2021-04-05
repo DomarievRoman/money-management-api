@@ -18,8 +18,10 @@ public class Income extends MoneyFlow {
     @Column(name = "income_from")
     private String from;
     @Column(name = "regular_income")
-    @JsonProperty
     private Boolean regular = false;
+    @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Cashbook cashbook;
 
     public Boolean getRegular() {
         return regular;
