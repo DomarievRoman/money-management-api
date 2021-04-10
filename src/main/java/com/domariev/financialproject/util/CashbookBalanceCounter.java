@@ -14,6 +14,5 @@ public class CashbookBalanceCounter {
         BigDecimal costsSum = cashbook.getCosts().stream().map(MoneyFlow::getPayment).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal currentBalance = incomeSum.subtract(costsSum);
         cashbook.setBalance(currentBalance);
-        log.info("current balance of cashbook with id " + cashbook.getId() +": " + currentBalance);
     }
 }

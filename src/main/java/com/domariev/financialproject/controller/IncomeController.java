@@ -1,6 +1,7 @@
 package com.domariev.financialproject.controller;
 
 import com.domariev.financialproject.dto.IncomeDto;
+import com.domariev.financialproject.search.AbstractSearchValues;
 import com.domariev.financialproject.service.IncomeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,11 @@ public class IncomeController {
     @GetMapping("/getAll")
     public ResponseEntity<List<IncomeDto>> getAllIncomes() {
         return ResponseEntity.ok(incomeService.getAll());
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<IncomeDto>> searchIncomes(@RequestBody AbstractSearchValues abstractSearchValues) {
+        return ResponseEntity.ok(incomeService.search(abstractSearchValues));
     }
 
     @PutMapping("/update")

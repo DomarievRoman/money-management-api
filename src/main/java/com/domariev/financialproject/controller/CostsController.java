@@ -1,6 +1,7 @@
 package com.domariev.financialproject.controller;
 
 import com.domariev.financialproject.dto.CostsDto;
+import com.domariev.financialproject.search.AbstractSearchValues;
 import com.domariev.financialproject.service.CostsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,11 @@ public class CostsController {
     @GetMapping("/getAll")
     public ResponseEntity<List<CostsDto>> getAllCosts() {
         return ResponseEntity.ok(costsService.getAll());
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<CostsDto>> searchCosts(@RequestBody AbstractSearchValues abstractSearchValues) {
+        return ResponseEntity.ok(costsService.search(abstractSearchValues));
     }
 
     @PutMapping("/update")

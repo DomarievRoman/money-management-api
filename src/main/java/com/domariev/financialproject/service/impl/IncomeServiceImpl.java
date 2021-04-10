@@ -8,6 +8,7 @@ import com.domariev.financialproject.model.Cashbook;
 import com.domariev.financialproject.model.Income;
 import com.domariev.financialproject.repository.CashbookRepository;
 import com.domariev.financialproject.repository.IncomeRepository;
+import com.domariev.financialproject.search.AbstractSearchValues;
 import com.domariev.financialproject.service.IncomeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +69,17 @@ public class IncomeServiceImpl implements IncomeService {
             throw new ResourceNotFoundException("There are no incomes yet");
         } else {
             log.info("getAll(): retrieved all incomes");
+            return incomeMapper.incomeListToDto(incomeList);
+        }
+    }
+
+    @Override
+    public List<IncomeDto> search(AbstractSearchValues abstractSearchValues) {
+        List<Income> incomeList = incomeRepository.findByFlowPurpose(abstractSearchValues.getFlowPurpose());
+        if (incomeList.isEmpty()) {
+            throw new ResourceNotFoundException("There are no wanted incomes");
+        } else {
+            log.info("search(): all found incomes");
             return incomeMapper.incomeListToDto(incomeList);
         }
     }

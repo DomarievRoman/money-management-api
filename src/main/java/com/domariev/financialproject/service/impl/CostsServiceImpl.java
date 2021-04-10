@@ -8,6 +8,7 @@ import com.domariev.financialproject.model.Cashbook;
 import com.domariev.financialproject.model.Costs;
 import com.domariev.financialproject.repository.CashbookRepository;
 import com.domariev.financialproject.repository.CostsRepository;
+import com.domariev.financialproject.search.AbstractSearchValues;
 import com.domariev.financialproject.service.CostsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +69,17 @@ public class CostsServiceImpl implements CostsService {
             throw new ResourceNotFoundException("There are no costs yet");
         } else {
             log.info("getAll(): retrieved all costs");
+            return costsMapper.costsListToDto(costsList);
+        }
+    }
+
+    @Override
+    public List<CostsDto> search(AbstractSearchValues abstractSearchValues) {
+        List<Costs> costsList = costsRepository.findByFlowPurpose(abstractSearchValues.getFlowPurpose());
+        if (costsList.isEmpty()) {
+            throw new ResourceNotFoundException("There are no wanted incomes");
+        } else {
+            log.info("search(): all found costs");
             return costsMapper.costsListToDto(costsList);
         }
     }
