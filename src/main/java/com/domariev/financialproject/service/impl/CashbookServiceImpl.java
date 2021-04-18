@@ -5,6 +5,9 @@ import com.domariev.financialproject.exception.ResourceCreationException;
 import com.domariev.financialproject.exception.ResourceNotFoundException;
 import com.domariev.financialproject.mapper.CashbookMapper;
 import com.domariev.financialproject.model.Cashbook;
+import com.domariev.financialproject.model.CashbookStatistics;
+import com.domariev.financialproject.model.Costs;
+import com.domariev.financialproject.model.Income;
 import com.domariev.financialproject.repository.CashbookRepository;
 import com.domariev.financialproject.service.CashbookService;
 import com.domariev.financialproject.util.CashbookBalanceCounter;
@@ -13,6 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,7 +51,6 @@ public class CashbookServiceImpl implements CashbookService {
         Cashbook cashbook = cashbookRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found cashbook with id " + id));
         log.info("get(): cashbook id " + id);
-        cashbookRepository.save(cashbook);
         return cashbookMapper.cashbookToCashbookDto(cashbook);
     }
 
@@ -81,5 +87,45 @@ public class CashbookServiceImpl implements CashbookService {
         log.info("get(): cashbook id " + id);
         cashbookRepository.delete(cashBook);
         log.info("delete(): cashbook id " + id + " deleted");
+    }
+
+    @Override
+    public CashbookStatistics getStatistics(Long id) {
+        CashbookStatistics statistics = new CashbookStatistics();
+        Cashbook cashbook = cashbookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found cashbook with id " + id));
+        BigDecimal largestIncomePayment = cashbook.getIncome().stream()
+                .map(Income::getPayment).max(BigDecimal::compareTo).orElse(null);
+        statistics.setLargestIncomePayment(largestIncomePayment);
+        BigDecimal largestCostPayment = cashbook.getCosts().stream()
+                .map(Costs::getPayment).max(BigDecimal::compareTo).orElse(null);
+        statistics.setLargestCostPayment(largestCostPayment);
+        LocalDate date = LocalDate.now();
+        String curMonth = String.valueOf(date.getMonthValue());
+
+        List<Income> incomeList = cashbook.getIncome();
+        List<Income> incomesByCurrentMonth = new ArrayList<>();
+        for (Income income : incomeList) {
+            String incomeMonth = String.valueOf(income.getTransactionDate().
+                    toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue());
+            if (incomeMonth.equals(curMonth)) {
+                incomesByCurrentMonth.add(income);
+            }
+        }
+        statistics.setAllIncomesByMonth(incomesByCurrentMonth);
+
+        List<Costs> costList = cashbook.getCosts();
+        List<Costs> costsByCurrentMonth = new ArrayList<>();
+        for (Costs c : costList) {
+            String costMonth = String.valueOf(c.getTransactionDate()
+                    .toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue());
+            if (costMonth.equals(curMonth)) {
+                costsByCurrentMonth.add(c);
+            }
+        }
+        statistics.setAllCostsByMonth(costsByCurrentMonth);
+        statistics.setCashbook(cashbook);
+        log.info("getStatistics(): get statistics of cashbook with id " + id);
+        return statistics;
     }
 }

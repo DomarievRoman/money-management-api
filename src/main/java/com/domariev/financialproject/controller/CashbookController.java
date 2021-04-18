@@ -1,6 +1,7 @@
 package com.domariev.financialproject.controller;
 
 import com.domariev.financialproject.dto.CashbookDto;
+import com.domariev.financialproject.model.CashbookStatistics;
 import com.domariev.financialproject.service.CashbookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,5 +45,10 @@ public class CashbookController {
     public ResponseEntity deleteCashbook(@PathVariable Long id) {
         cashbookService.delete(id);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/getStatistics/{id}")
+    public ResponseEntity<CashbookStatistics> getStatisticsByCashbook(@PathVariable Long id) {
+        return ResponseEntity.ok(cashbookService.getStatistics(id));
     }
 }
