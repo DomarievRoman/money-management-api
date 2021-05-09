@@ -58,8 +58,10 @@ public class CashbookServiceImpl implements CashbookService {
     public List<CashbookDto> getAll() {
         List<Cashbook> cashbookList = cashbookRepository.findAll();
         for (Cashbook cashbook : cashbookList) {
-            CashbookBalanceCounter.countBalance(cashbook);
-            cashbookRepository.save(cashbook);
+            if (cashbook.getIncome() != null && cashbook.getCosts() != null) {
+                CashbookBalanceCounter.countBalance(cashbook);
+                cashbookRepository.save(cashbook);
+            }
         }
         if (cashbookList.isEmpty()) {
             throw new ResourceNotFoundException("There are no cashbooks yet");

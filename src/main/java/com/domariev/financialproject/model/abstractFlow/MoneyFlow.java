@@ -2,7 +2,9 @@ package com.domariev.financialproject.model.abstractFlow;
 
 import com.domariev.financialproject.serializer.MoneySerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +15,8 @@ import java.util.Date;
 
 @MappedSuperclass
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MoneyFlow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
