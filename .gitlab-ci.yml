@@ -1,5 +1,15 @@
 image: maven:latest
 
+before_script:
+  - chmod +x mvnw
+
+#custom stages
+stages:
+  - build
+  - test
+  - package
+  - dockerise
+
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"   #local maven repo
 
@@ -8,19 +18,13 @@ cache:
   paths:
     - .m2/repository
 
-#custom stages
-stages:
-  - package
-  - build&test
-  - dockerise
-
 Build:
-  stage: build&test
+  stage: build
   script:
-    - mvn $MAVEN_OPTS compile
+    - mvn $MAVEN_OPTS clean compile
 
 Test:
-  stage: build&test
+  stage: test
   script:
     - mvn $MAVEN_OPTS test
   artifacts:
@@ -49,6 +53,6 @@ Dockerise:
   script:
     - "cp $(ls target/*.jar) docker/financial-app.jar"  #copy jar file from target to docker folder
     - cd docker
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG   #build image
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG . #build image
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com  #login in registry gitlab (container registry for images)
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG   #push image
